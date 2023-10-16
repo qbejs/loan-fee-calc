@@ -1,0 +1,37 @@
+name: FeeCalcPipeline
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+      with:
+        php-version: '8.1'
+    - uses: actions/checkout@v3
+    - name: Copy and Rename .env.test to .env
+      run: cp .env.test .env
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    -   name: Check code with php-cs-fixer
+        run: |
+            composer global require friendsofphp/php-cs-fixer
+            ~/.composer/vendor/bin/php-cs-fixer fix src/ --rules=@PSR12 --dry-run
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      run: vendor/bin/phpunit
