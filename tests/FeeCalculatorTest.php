@@ -63,10 +63,10 @@ class FeeCalculatorTest extends TestCase
     public function testFeeCalculationForTwentyFourMonths(): void
     {
         $calculator = new FeeCalculator($this->provider);
-        $application = new LoanProposal(new LoanTerm(24), new LoanAmount(5000.00));
+        $application = new LoanProposal(new LoanTerm(24), new LoanAmount(2750.00));
         $result = $calculator->calculate($application);
         $this->assertInstanceOf(FeeResultDTO::class, $result);
-        $this->assertEquals(200.0, $result->getFee());
+        $this->assertEquals(115.0, $result->getFee());
     }
 
 }
