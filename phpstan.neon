@@ -1,0 +1,7 @@
+parameters:
+    level: 6 # Poziom analizy - możesz dostosować według potrzeb
+    paths:
+        - src/ # Zakładając, że Twój kod znajduje się w katalogu "src"
+    excludes_analyse:
+        - src/vendor/* # Wykluczanie katalogu "vendor"
+    checkMissingIterableValueType: false
